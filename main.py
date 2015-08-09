@@ -1,5 +1,9 @@
 #!/usr/bin/python
 from markov import sentenceGenerator
+
+
+
+
 def main():
     
     m_generator = sentenceGenerator("words.txt")
