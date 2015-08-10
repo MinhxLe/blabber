@@ -6,6 +6,7 @@ matches pattern of inputted obj_list of resultects
 
 import queue
 import tools
+import random
 
 class markov_chain:
     def __init__(self, obj_list, level=1):
@@ -50,7 +51,23 @@ class markov_chain:
                 print (self.pair_tb[i][o])
 
     def generate_obj_list(self, count = 10):
-        print("hi world")
+        cache = queue.Queue(self.level)
+        cache.put(self.start)
+        print(self.start)
+        for x in range(1, count):
+            pattern = [obj for obj in cache.queue]
+            #returns longest pattern from history
+            while not tuple(pattern) in self.pair_tb:
+                pattern.pop()
+            new_obj = tools.weighted_choice(self.pair_tb[tuple(pattern)])
+            print (new_obj)
+            #updates cache
+            if cache.full():
+                cache.get()
+            cache.put(new_obj)
+
+
+
 
 
 
