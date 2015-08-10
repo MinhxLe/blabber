@@ -15,7 +15,28 @@ class markov_chain:
         self.pair_tb = {}
         self.__fill_pair_tb(obj_list)
         #need a random obj to start off
+        #TODO: need to change random start else it'll stay the same per generation
         self.start = random.choice(obj_list)
+
+    #returns a randomly generated list of objects based on
+    #pair_tb
+    def generate_obj_list(self, count = 10):
+        cache = queue.Queue(self.level)
+        obj_list = []
+        cache.put(self.start)
+        obj_list.append(self.start)
+        for x in range(1, count):
+            pattern = [obj for obj in cache.queue]
+            #returns longest pattern from history
+            while not tuple(pattern) in self.pair_tb:
+                pattern.pop()
+            new_obj = tools.weighted_choice(self.pair_tb[tuple(pattern)])
+            obj_list.append(new_obj)
+            #updates cache
+            if cache.full():
+                cache.get()
+            cache.put(new_obj)
+        return obj_list
 
     def __fill_pair_tb(self, obj_list):
         #cache stores words read until full and then
@@ -43,31 +64,11 @@ class markov_chain:
                     c.put(result)
 
     def __debug_pair_tb(self):
-
         for i in self.pair_tb:
             for o in i:
                 print(i)
                 print(o)
                 print (self.pair_tb[i][o])
-
-    def generate_obj_list(self, count = 10):
-        cache = queue.Queue(self.level)
-        cache.put(self.start)
-        print(self.start)
-        for x in range(1, count):
-            pattern = [obj for obj in cache.queue]
-            #returns longest pattern from history
-            while not tuple(pattern) in self.pair_tb:
-                pattern.pop()
-            new_obj = tools.weighted_choice(self.pair_tb[tuple(pattern)])
-            print (new_obj)
-            #updates cache
-            if cache.full():
-                cache.get()
-            cache.put(new_obj)
-
-
-
 
 
 
