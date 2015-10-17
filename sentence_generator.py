@@ -7,6 +7,7 @@ class sentence_generator(markov.markov_chain):
         try:
             raw_file = open(filename)
             raw_txt = raw_file.read()
+            raw_file.close()
             words_list = self.__clean_raw_file(raw_txt).split()
             super().__init__(words_list, level)
         except IOError:

@@ -11,7 +11,7 @@ import random
 class markov_chain:
     def __init__(self, obj_list, level=1):
         self.level = level
-        #no point in storing obj_list variable
+        self.obj_list = obj_list
         self.pair_tb = {}
         self.__fill_pair_tb(obj_list)
         #need a random obj to start off
@@ -23,8 +23,12 @@ class markov_chain:
     def generate_obj_list(self, count = 10):
         cache = queue.Queue(self.level)
         obj_list = []
-        cache.put(self.start)
-        obj_list.append(self.start)
+        #randomly generate the first word
+        start = random.choice(self.obj_list)
+        obj_list.append(start)
+        cache.put(start)
+
+
         for x in range(1, count):
             pattern = [obj for obj in cache.queue]
             #returns longest pattern from history
